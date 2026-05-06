@@ -6,15 +6,6 @@ from bs4 import BeautifulSoup
 from PIL import ImageTk, Image
 
 def update():
-    localcurrentdateandtime = datetime.now()
-    currentdatetime = localcurrentdateandtime.strftime("%m/%d/%Y")
-
-    url = "https://www.weather.gov/"
-
-    html = requests.get(url).content
-
-    soup = BeautifulSoup(html, 'html.parser')
-
     ctk.set_appearance_mode("light")
 
     app = ctk.CTk()
