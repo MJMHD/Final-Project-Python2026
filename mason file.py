@@ -29,7 +29,9 @@ def get_weather(lat, lon):
         "latitude": lat,
         "longitude": lon,
         "current_weather": True,
-        "hourly": "relative_humidity_2m"
+        "hourly": "relative_humidity_2m,precipitation_probability",
+        "temperature_unit": "fahrenheit",
+        "windspeed_unit": "mph"
     }
 
     response = requests.get(url, params=params)
@@ -37,8 +39,23 @@ def get_weather(lat, lon):
 
     current = data["current_weather"]
     humidity = data["hourly"]["relative_humidity_2m"][0]
+    precipitation = data["hourly"]["precipitation_probability"][0]
+    temp = current["temperature"]
+    wind = current["windspeed"]
 
-    return current, humidity
+    feels = feels_like(temp, wind)
+
+    return current, humidity, precipitation
+
+def feels_like(temp, wind):
+    # simple approximation (not perfect, but good for projects)
+
+    if temp <= 50:  # cold weather (wind chill style)
+        return temp - (wind * 0.7)
+    else:  # warmer weather
+        return temp + (wind * 0.1)
+
+
 def get_weather_description(code):
     weather_codes = {
         0: "Clear sky",
@@ -56,17 +73,30 @@ def get_weather_description(code):
     return weather_codes.get(code, "Unknown")
 place = input("Enter a location: ")
 
+
+def feels_like(temp, wind):
+    # simple approximation (not perfect, but good for projects)
+
+    if temp <= 50:  # cold weather (wind chill style)
+        return temp - (wind * 0.7)
+    else:  # warmer weather
+        return temp + (wind * 0.1)
+
 lat, lon = get_lat_lon(place)
 
 if lat and lon:
-    current, humidity = get_weather(lat, lon)
+    current, humidity, precipitation = get_weather(lat, lon)
+
+
 
     description = get_weather_description(current["weathercode"])
 
-    print(f"Temperature: {current['temperature']}°C")
-    print(f"Wind Speed: {current['windspeed']} km/h")
+    print(f"Temperature: {current['temperature']}°F")
+    print(f"Wind Speed: {current['windspeed']} mph")
     print(f"Humidity: {humidity}%")
     print(f"Condition: {description}")
+    print(f"Precipitation Chance: {precipitation}%")
+    print(f"Feels Like: {feels:.1f}°F")
 else:
     print("Location not found")
 
