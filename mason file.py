@@ -30,8 +30,10 @@ def get_weather(lat, lon):
         "longitude": lon,
         "current_weather": True,
         "hourly": "relative_humidity_2m,precipitation_probability",
+        "daily": "temperature_2m_max,temperature_2m_min",
         "temperature_unit": "fahrenheit",
-        "windspeed_unit": "mph"
+        "windspeed_unit": "mph",
+        "timezone": "auto"
     }
 
     response = requests.get(url, params=params)
@@ -42,10 +44,12 @@ def get_weather(lat, lon):
     precipitation = data["hourly"]["precipitation_probability"][0]
     temp = current["temperature"]
     wind = current["windspeed"]
+    high_temp = data["daily"]["temperature_2m_max"][0]
+    low_temp = data["daily"]["temperature_2m_min"][0]
 
     feels = feels_like(temp, wind)
 
-    return current, humidity, precipitation, feels
+    return current, humidity, precipitation, feels,  high_temp, low_temp
 
 def feels_like(temp, wind):
     # simple approximation (not perfect, but good for projects)
@@ -85,7 +89,7 @@ def feels_like(temp, wind):
 lat, lon = get_lat_lon(place)
 
 if lat and lon:
-    current, humidity, precipitation, feels= get_weather(lat, lon)
+    current, humidity, precipitation, feels, high_temp, low_temp = get_weather(lat, lon)
 
 
     description = get_weather_description(current["weathercode"])
@@ -96,6 +100,8 @@ if lat and lon:
     print(f"Condition: {description}")
     print(f"Precipitation Chance: {precipitation}%")
     print(f"Feels Like: {feels:.1f}°F")
+    print(f"High: {high_temp}°F")
+    print(f"Low: {low_temp}°F")
 else:
     print("Location not found")
 
