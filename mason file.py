@@ -45,7 +45,7 @@ def get_weather(lat, lon):
 
     feels = feels_like(temp, wind)
 
-    return current, humidity, precipitation
+    return current, humidity, precipitation, feels
 
 def feels_like(temp, wind):
     # simple approximation (not perfect, but good for projects)
@@ -85,8 +85,7 @@ def feels_like(temp, wind):
 lat, lon = get_lat_lon(place)
 
 if lat and lon:
-    current, humidity, precipitation = get_weather(lat, lon)
-
+    current, humidity, precipitation, feels= get_weather(lat, lon)
 
 
     description = get_weather_description(current["weathercode"])
