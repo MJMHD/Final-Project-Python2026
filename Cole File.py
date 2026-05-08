@@ -14,13 +14,29 @@ def update():
     app.title("Weather App")
     app.configure(fg_color="sky blue")
 
-    img = Image.open("Sun-Transparent-PNG.png")
-    img = img.resize((288, 284))
+    img = Image.open("Sun-Transparent-PNG.png").convert("RGBA")
+    img = img.resize((230, 216))
 
     photo = ImageTk.PhotoImage(img)
 
-    label = Label(app, image=photo)
-    label.pack()
+    label = Label(app, image=photo, bg="sky blue", borderwidth=0, highlightthickness=0)
+    label.pack(pady=(40,0))
+
+    #img = Image.open("clouds.png").convert("RGBA")
+    #img = img.resize((230, 216))
+
+    #photo = ImageTk.PhotoImage(img)
+
+    #label = Label(app, image=photo, bg="gray", borderwidth=0, highlightthickness=0)
+    #label.pack(pady=(40, 0))
+
+    #img = Image.open("moon.png").convert("RGBA")
+    #img = img.resize((230, 216))
+
+    #photo = ImageTk.PhotoImage(img)
+
+    #label = Label(app, image=photo, bg="black", borderwidth=0, highlightthickness=0)
+    #label.pack(pady=(40, 0))
 
     main_frame = ctk.CTkFrame(app, corner_radius=15, fg_color="sky blue")
     main_frame.pack(padx=20, pady=20, fill="both", expand=True)
