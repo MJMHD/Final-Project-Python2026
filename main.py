@@ -1,3 +1,4 @@
+import wind
 from customtkinter import CTkImage
 import customtkinter as ctk
 from datetime import datetime
@@ -159,22 +160,22 @@ def update():
     weather_card = ctk.CTkFrame(main_frame, corner_radius=20, fg_color="blue")
     weather_card.pack(pady=20, padx=10, fill="both", expand=True)
 
-    city_label = ctk.CTkLabel(weather_card, text="New York", font=("Arial", 22), text_color="lightgray")
+    city_label = ctk.CTkLabel(weather_card, text=place, font=("Arial", 22), text_color="lightgray")
     city_label.pack(pady=(20, 5))
 
-    temp_label = ctk.CTkLabel(weather_card, text="22°C", font=("Arial", 50, "bold"), text_color="lightgray")
+    temp_label = ctk.CTkLabel(weather_card, text=(current["temperature"]), font=("Arial", 50, "bold"), text_color="lightgray")
     temp_label.pack()
 
-    condition_label = ctk.CTkLabel(weather_card, text="Sunny ☀️", font=("Arial", 18), text_color="lightgray")
+    condition_label = ctk.CTkLabel(weather_card, text=description, font=("Arial", 18), text_color="lightgray")
     condition_label.pack(pady=5)
 
     info_frame = ctk.CTkFrame(weather_card, fg_color="transparent")
     info_frame.pack(pady=20)
 
-    humidity = ctk.CTkLabel(info_frame, text="Humidity\n60%", justify="center", text_color="lightgray")
-    humidity.grid(row=0, column=0, padx=20)
+    feelslike = ctk.CTkLabel(info_frame, text=(), justify="center", text_color="lightgray")
+    feelslike.grid(row=0, column=0, padx=20)
 
-    wind = ctk.CTkLabel(info_frame, text="Wind\n12 km/h", justify="center", text_color="lightgray")
+    wind = ctk.CTkLabel(info_frame, text=("Windspeed:", current["windspeed"]), justify="center", text_color="lightgray")
     wind.grid(row=0, column=1, padx=20)
 
     app.mainloop()
