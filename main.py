@@ -1,4 +1,3 @@
-import wind
 from customtkinter import CTkImage
 import customtkinter as ctk
 from datetime import datetime
