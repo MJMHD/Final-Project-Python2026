@@ -87,13 +87,12 @@ def feels_like(temp, wind):
     else:  # warmer weather
         return temp + (wind * 0.1)
 
-lat, lon = get_lat_lon(place)
-
 
 #gui down
 
 
 def update():
+    lat, lon = get_lat_lon(place)
     if lat and lon:
         current, humidity, precipitation, feels, high_temp, low_temp = get_weather(lat, lon)
 
@@ -117,22 +116,23 @@ def update():
     app.title("Weather App")
     app.configure(fg_color="sky blue")
 
-    img = Image.open("Sun-Transparent-PNG.png").convert("RGBA")
-    img = img.resize((230, 216))
-
-    photo = ImageTk.PhotoImage(img)
-
-    label = Label(app, image=photo, bg="sky blue", borderwidth=0, highlightthickness=0)
-    label.pack(pady=(40,0))
-
     if description == 0 or 1:
+        img = Image.open("Sun-Transparent-PNG.png").convert("RGBA")
+        img = img.resize((230, 216))
+
+        photo = ImageTk.PhotoImage(img)
+
+        label = Label(app, image=photo, bg="sky blue", borderwidth=0, highlightthickness=0)
+        label.pack(pady=(20,0))
+
+    elif description == 2 or 3:
         img = Image.open("clouds.png").convert("RGBA")
         img = img.resize((230, 216))
 
         photo = ImageTk.PhotoImage(img)
 
         label = Label(app, image=photo, bg="gray", borderwidth=0, highlightthickness=0)
-        label.pack(pady=(40, 0))
+        label.pack(pady=(20, 0))
 
     #img = Image.open("moon.png").convert("RGBA")
     #img = img.resize((230, 216))
@@ -166,16 +166,16 @@ def update():
     temp_label = ctk.CTkLabel(weather_card, text=(current["temperature"]), font=("Arial", 50, "bold"), text_color="lightgray")
     temp_label.pack()
 
-    condition_label = ctk.CTkLabel(weather_card, text=str(description), font=("Arial", 18), text_color="lightgray")
+    condition_label = ctk.CTkLabel(weather_card, text=description, font=("Arial", 18), text_color="lightgray")
     condition_label.pack(pady=5)
 
     info_frame = ctk.CTkFrame(weather_card, fg_color="transparent")
     info_frame.pack(pady=20)
 
-    feelslike = ctk.CTkLabel(info_frame, text=(feels_like(temp, wind)), justify="center", text_color="lightgray")
-    feelslike.grid(row=0, column=0, padx=20)
+    #feelslike = ctk.CTkLabel(info_frame, text=(feels_like(temp, wind)), justify="center", text_color="lightgray")
+    #feelslike.grid(row=0, column=0, padx=20)
 
-    wind = ctk.CTkLabel(info_frame, text=str("Windspeed:", current["windspeed"]), justify="center", text_color="lightgray")
+    wind = ctk.CTkLabel(info_frame, text=("Windspeed:", current["windspeed"]), justify="center", text_color="lightgray")
     wind.grid(row=0, column=1, padx=20)
 
     app.mainloop()
