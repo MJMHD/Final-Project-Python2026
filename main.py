@@ -89,28 +89,27 @@ def feels_like(temp, wind):
 
 lat, lon = get_lat_lon(place)
 
-if lat and lon:
-    current, humidity, precipitation, feels, high_temp, low_temp = get_weather(lat, lon)
-
-
-    description = get_weather_description(current["weathercode"])
-
-    print(f"Temperature: {current['temperature']}°F")
-    print(f"Wind Speed: {current['windspeed']} mph")
-    print(f"Humidity: {humidity}%")
-    print(f"Condition: {description}")
-    print(f"Precipitation Chance: {precipitation}%")
-    print(f"Feels Like: {feels:.1f}°F")
-    print(f"High: {high_temp}°F")
-    print(f"Low: {low_temp}°F")
-else:
-    print("Location not found")
-
 
 #gui down
 
 
 def update():
+    if lat and lon:
+        current, humidity, precipitation, feels, high_temp, low_temp = get_weather(lat, lon)
+
+        description = get_weather_description(current["weathercode"])
+
+        print(f"Temperature: {current['temperature']}°F")
+        print(f"Wind Speed: {current['windspeed']} mph")
+        print(f"Humidity: {humidity}%")
+        print(f"Condition: {description}")
+        print(f"Precipitation Chance: {precipitation}%")
+        print(f"Feels Like: {feels:.1f}°F")
+        print(f"High: {high_temp}°F")
+        print(f"Low: {low_temp}°F")
+    else:
+        print("Location not found")
+
     ctk.set_appearance_mode("light")
 
     app = ctk.CTk()
@@ -126,13 +125,14 @@ def update():
     label = Label(app, image=photo, bg="sky blue", borderwidth=0, highlightthickness=0)
     label.pack(pady=(40,0))
 
-    #img = Image.open("clouds.png").convert("RGBA")
-    #img = img.resize((230, 216))
+    if description == 0 or 1:
+        img = Image.open("clouds.png").convert("RGBA")
+        img = img.resize((230, 216))
 
-    #photo = ImageTk.PhotoImage(img)
+        photo = ImageTk.PhotoImage(img)
 
-    #label = Label(app, image=photo, bg="gray", borderwidth=0, highlightthickness=0)
-    #label.pack(pady=(40, 0))
+        label = Label(app, image=photo, bg="gray", borderwidth=0, highlightthickness=0)
+        label.pack(pady=(40, 0))
 
     #img = Image.open("moon.png").convert("RGBA")
     #img = img.resize((230, 216))
@@ -166,16 +166,16 @@ def update():
     temp_label = ctk.CTkLabel(weather_card, text=(current["temperature"]), font=("Arial", 50, "bold"), text_color="lightgray")
     temp_label.pack()
 
-    condition_label = ctk.CTkLabel(weather_card, text=description, font=("Arial", 18), text_color="lightgray")
+    condition_label = ctk.CTkLabel(weather_card, text=str(description), font=("Arial", 18), text_color="lightgray")
     condition_label.pack(pady=5)
 
     info_frame = ctk.CTkFrame(weather_card, fg_color="transparent")
     info_frame.pack(pady=20)
 
-    feelslike = ctk.CTkLabel(info_frame, text=(), justify="center", text_color="lightgray")
+    feelslike = ctk.CTkLabel(info_frame, text=(feels_like(temp, wind)), justify="center", text_color="lightgray")
     feelslike.grid(row=0, column=0, padx=20)
 
-    wind = ctk.CTkLabel(info_frame, text=("Windspeed:", current["windspeed"]), justify="center", text_color="lightgray")
+    wind = ctk.CTkLabel(info_frame, text=str("Windspeed:", current["windspeed"]), justify="center", text_color="lightgray")
     wind.grid(row=0, column=1, padx=20)
 
     app.mainloop()
