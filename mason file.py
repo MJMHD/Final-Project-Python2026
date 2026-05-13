@@ -1,12 +1,43 @@
-import customtkinter
+from customtkinter import CTkImage
+import json
+import customtkinter as ctk
 from datetime import datetime
 from time import strftime
 import requests
 from bs4 import BeautifulSoup
+from tkinter import Label
 from PIL import ImageTk, Image
-from customtkinter import CTkImage
-import requests
 
+def write_json(data):
+    with open("Past_Whater.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+def read_json():
+    try:
+        with open("gamestats.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return None
+
+class GameStats:
+    def __init__(self, date, cq, death, level):
+        self.date = date
+        self.cq = cq
+        self.death = death
+        self.level = level
+    def to_dict(self):
+        return {"date": self.date,
+                "compltde qust": self.cq,
+                "death": self.death,
+                "level": self.level
+        }
+    def add_entry(self, entry):
+        self.entries.append(entry)
+        self.save()
+        print(f"Added: {entry.date} ({entry.death} calories) on {entry.cq}")
+    def save(self):
+        with open(self.filename, "w") as file:
+            json.dump([e.to_dict() for e in self.entries], file, indent=4)
 
 
 def get_lat_lon(place):
@@ -75,8 +106,8 @@ def get_weather_description(code):
         95: "Thunderstorm"
     }
     return weather_codes.get(code, "Unknown")
-place = input("Enter a location: ")
 
+place = input("Enter a location: ")
 
 def feels_like(temp, wind):
     # simple approximation (not perfect, but good for projects)
@@ -86,54 +117,100 @@ def feels_like(temp, wind):
     else:  # warmer weather
         return temp + (wind * 0.1)
 
-lat, lon = get_lat_lon(place)
+an = input("do you want to save today's weather data? (y/n)")
+if an == "y":
 
-if lat and lon:
-    current, humidity, precipitation, feels, high_temp, low_temp = get_weather(lat, lon)
+#gui down
 
+def update():
+    lat, lon = get_lat_lon(place)
+    if lat and lon:
+        current, humidity, precipitation, feels, high_temp, low_temp = get_weather(lat, lon)
 
-    description = get_weather_description(current["weathercode"])
+        description = get_weather_description(current["weathercode"])
 
-    print(f"Temperature: {current['temperature']}°F")
-    print(f"Wind Speed: {current['windspeed']} mph")
-    print(f"Humidity: {humidity}%")
-    print(f"Condition: {description}")
-    print(f"Precipitation Chance: {precipitation}%")
-    print(f"Feels Like: {feels:.1f}°F")
-    print(f"High: {high_temp}°F")
-    print(f"Low: {low_temp}°F")
-else:
-    print("Location not found")
+        print(f"Temperature: {current['temperature']}°F")
+        print(f"Wind Speed: {current['windspeed']} mph")
+        print(f"Humidity: {humidity}%")
+        print(f"Condition: {description}")
+        print(f"Precipitation Chance: {precipitation}%")
+        print(f"Feels Like: {feels:.1f}°F")
+        print(f"High: {high_temp}°F")
+        print(f"Low: {low_temp}°F")
+    else:
+        print("Location not found")
 
+    ctk.set_appearance_mode("light")
 
+    app = ctk.CTk()
+    app.geometry("420x500")
+    app.title("Weather App")
+    app.configure(fg_color="sky blue")
 
+    if description == 0 or 1:
+        img = Image.open("Sun-Transparent-PNG.png").convert("RGBA")
+        img = img.resize((230, 216))
 
+        photo = ImageTk.PhotoImage(img)
 
+        label = Label(app, image=photo, bg="sky blue", borderwidth=0, highlightthickness=0)
+        label.pack(pady=(20,0))
 
+    elif description == 2 or 3:
+        img = Image.open("clouds.png").convert("RGBA")
+        img = img.resize((230, 216))
 
+        photo = ImageTk.PhotoImage(img)
 
+        label = Label(app, image=photo, bg="gray", borderwidth=0, highlightthickness=0)
+        label.pack(pady=(20, 0))
 
+    #img = Image.open("moon.png").convert("RGBA")
+    #img = img.resize((230, 216))
 
+    #photo = ImageTk.PhotoImage(img)
 
+    #label = Label(app, image=photo, bg="black", borderwidth=0, highlightthickness=0)
+    #label.pack(pady=(40, 0))
 
+    main_frame = ctk.CTkFrame(app, corner_radius=15, fg_color="sky blue")
+    main_frame.pack(padx=20, pady=20, fill="both", expand=True)
 
+    title = ctk.CTkLabel(main_frame, text="Weather", font=("Arial", 28, "bold"), text_color="yellow")
+    title.pack(pady=(20, 10))
 
+    search_frame = ctk.CTkFrame(main_frame, fg_color="sky blue")
+    search_frame.pack(pady=10)
 
+    city_entry = ctk.CTkEntry(search_frame, placeholder_text="Enter city...", width=200)
+    city_entry.grid(row=0, column=0, padx=5)
 
+    search_btn = ctk.CTkButton(search_frame, text="Search")
+    search_btn.grid(row=0, column=1, padx=5)
 
+    weather_card = ctk.CTkFrame(main_frame, corner_radius=20, fg_color="blue")
+    weather_card.pack(pady=20, padx=10, fill="both", expand=True)
 
+    city_label = ctk.CTkLabel(weather_card, text=place, font=("Arial", 22), text_color="lightgray")
+    city_label.pack(pady=(20, 5))
 
+    temp_label = ctk.CTkLabel(weather_card, text=(current["temperature"]), font=("Arial", 50, "bold"), text_color="lightgray")
+    temp_label.pack()
 
+    condition_label = ctk.CTkLabel(weather_card, text=description, font=("Arial", 18), text_color="lightgray")
+    condition_label.pack(pady=5)
 
+    info_frame = ctk.CTkFrame(weather_card, fg_color="transparent")
+    info_frame.pack(pady=20)
 
+    #feelslike = ctk.CTkLabel(info_frame, text=(feels_like(temp, wind)), justify="center", text_color="lightgray")
+    #feelslike.grid(row=0, column=0, padx=20)
 
+    wind = ctk.CTkLabel(info_frame, text=("Windspeed:", current["windspeed"]), justify="center", text_color="lightgray")
+    wind.grid(row=0, column=1, padx=20)
 
-
-
-
-
-
-
+    app.mainloop()
+update()
 
 
 
