@@ -113,7 +113,7 @@ def update():
     app = ctk.CTk()
     app.geometry("420x500")
     app.title("Weather App")
-    app.configure(fg_color="white")
+    app.configure(fg_color="black")
 
     description = 95
 
@@ -123,16 +123,16 @@ def update():
 
         photo = ImageTk.PhotoImage(img)
 
-        label = Label(app, image=photo, bg="white", borderwidth=0, highlightthickness=0)
+        label = Label(app, image=photo, bg="black", borderwidth=0, highlightthickness=0)
         label.pack(pady=(20, 0))
 
-        main_frame = ctk.CTkFrame(app, corner_radius=15, fg_color="white")
+        main_frame = ctk.CTkFrame(app, corner_radius=15, fg_color="black")
         main_frame.pack(padx=20, pady=20, fill="both", expand=True)
 
-        title = ctk.CTkLabel(main_frame, text="Weather", font=("Arial", 28, "bold"), text_color="light blue")
+        title = ctk.CTkLabel(main_frame, text="Weather", font=("Arial", 28, "bold"), text_color="purple")
         title.pack(pady=(20, 10))
 
-        search_frame = ctk.CTkFrame(main_frame, fg_color="white")
+        search_frame = ctk.CTkFrame(main_frame, fg_color="black")
         search_frame.pack(pady=10)
 
         city_entry = ctk.CTkEntry(search_frame, placeholder_text="Enter city...", width=200)
@@ -141,7 +141,7 @@ def update():
         search_btn = ctk.CTkButton(search_frame, text="Search")
         search_btn.grid(row=0, column=1, padx=5)
 
-        weather_card = ctk.CTkFrame(main_frame, corner_radius=20, fg_color="blue")
+        weather_card = ctk.CTkFrame(main_frame, corner_radius=20, fg_color="purple")
         weather_card.pack(pady=20, padx=10, fill="both", expand=True)
 
         city_label = ctk.CTkLabel(weather_card, text=place, font=("Arial", 22), text_color="lightgray")
@@ -157,8 +157,8 @@ def update():
         info_frame = ctk.CTkFrame(weather_card, fg_color="transparent")
         info_frame.pack(pady=20)
 
-        # feelslike = ctk.CTkLabel(info_frame, text=(feels_like(temp, wind)), justify="center", text_color="lightgray")
-        # feelslike.grid(row=0, column=0, padx=20)
+        feelslike = ctk.CTkLabel(info_frame, text=(f"Feels Like: {feels:.1f}°F"), justify="center", text_color="lightgray")
+        feelslike.grid(row=0, column=0, padx=20)
 
         wind = ctk.CTkLabel(info_frame, text=("Windspeed:", current["windspeed"]), justify="center",
                             text_color="lightgray")

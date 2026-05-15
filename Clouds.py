@@ -157,8 +157,8 @@ def update():
         info_frame = ctk.CTkFrame(weather_card, fg_color="transparent")
         info_frame.pack(pady=20)
 
-        # feelslike = ctk.CTkLabel(info_frame, text=(feels_like(temp, wind)), justify="center", text_color="lightgray")
-        # feelslike.grid(row=0, column=0, padx=20)
+        feelslike = ctk.CTkLabel(info_frame, text=(f"Feels Like: {feels:.1f}°F"), justify="center", text_color="lightgray")
+        feelslike.grid(row=0, column=0, padx=20)
 
         wind = ctk.CTkLabel(info_frame, text=("Windspeed:", current["windspeed"]), justify="center",
                             text_color="lightgray")
