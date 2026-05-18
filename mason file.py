@@ -8,33 +8,43 @@ from bs4 import BeautifulSoup
 from tkinter import Label
 from PIL import ImageTk, Image
 
+#print(f"Temperature: {current['temperature']}°F")
+#print(f"Wind Speed: {current['windspeed']} mph")
+#print(f"Humidity: {humidity}%")
+#print(f"Condition: {description}")
+#print(f"Precipitation Chance: {precipitation}%")
+#print(f"Feels Like: {feels:.1f}°F")
+#print(f"High: {high_temp}°F")
+#print(f"Low: {low_temp}°F")
+
+
 def write_json(data):
     with open("Past_Whater.json", "w") as file:
         json.dump(data, file, indent=4)
 
 def read_json():
     try:
-        with open("gamestats.json", "r") as file:
+        with open("Past_Whater.json", "r") as file:
             return json.load(file)
     except FileNotFoundError:
         return None
 
-class GameStats:
-    def __init__(self, date, cq, death, level):
+class Past_Whater:
+    def __init__(self, date, pla, ws, hu, con, pc, fl, h, l):
         self.date = date
-        self.cq = cq
-        self.death = death
-        self.level = level
-    def to_dict(self):
-        return {"date": self.date,
-                "compltde qust": self.cq,
-                "death": self.death,
-                "level": self.level
-        }
-    def add_entry(self, entry):
-        self.entries.append(entry)
+        self.pla = pla
+        self.ws = ws
+        self.hu = hu
+        self.con = con
+        self.pc = pc
+        self.fl = fl
+        self.h = h
+        self.l = l
+
+    def add_entry(self, Past_Whater):
+        self.Past_Whater.append(Past_Whater)
         self.save()
-        print(f"Added: {entry.date} ({entry.death} calories) on {entry.cq}")
+        print(f"Added: {Past_Whater.date} {Past_Whater.pla} {Past_Whater.ws} {Past_Whater.hu} {Past_Whater.con} {Past_Whater.pc} {Past_Whater.fl} {Past_Whater.h} {Past_Whater.l}")
     def save(self):
         with open(self.filename, "w") as file:
             json.dump([e.to_dict() for e in self.entries], file, indent=4)
@@ -117,9 +127,9 @@ def feels_like(temp, wind):
     else:  # warmer weather
         return temp + (wind * 0.1)
 
-an = input("do you want to save today's weather data? (y/n)")
-if an == "y":
-
+#an = input("do you want to save today's weather data? (y/n)")
+#if an == "y":
+    #
 #gui down
 
 def update():
