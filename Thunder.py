@@ -113,11 +113,9 @@ def update():
     app = ctk.CTk()
     app.geometry("420x500")
     app.title("Weather App")
-    app.configure(fg_color="black")
-
-    description = 95
 
     if description == 95:
+        app.configure(fg_color="black")
         img = Image.open("Thunder.png").convert("RGBA")
         img = img.resize((230, 216))
 
@@ -157,12 +155,26 @@ def update():
         info_frame = ctk.CTkFrame(weather_card, fg_color="transparent")
         info_frame.pack(pady=20)
 
-        feelslike = ctk.CTkLabel(info_frame, text=(f"Feels Like: {feels:.1f}°F"), justify="center", text_color="lightgray")
-        feelslike.grid(row=0, column=0, padx=20)
+        feelslike = ctk.CTkLabel(info_frame, text=(f"Feels Like: {feels:.1f}°F"), justify="center",
+                                 text_color="lightgray")
+        feelslike.grid(row=2, column=0, padx=20)
 
-        wind = ctk.CTkLabel(info_frame, text=("Windspeed:", current["windspeed"]), justify="center",
+        wind = ctk.CTkLabel(info_frame, text=("Windspeed:", current["windspeed"], "mph"), justify="center",
                             text_color="lightgray")
         wind.grid(row=0, column=1, padx=20)
+
+        high = ctk.CTkLabel(info_frame, text=(f"High: {high_temp}°F"), justify="center", text_color="lightgray")
+        high.grid(row=1, column=0, padx=20)
+
+        low = ctk.CTkLabel(info_frame, text=(f"Low: {low_temp}°F"), justify="center", text_color="lightgray")
+        low.grid(row=0, column=0, padx=20)
+
+        humidity = ctk.CTkLabel(info_frame, text=(f"Humidity: {humidity}%"), justify="center", text_color="lightgray")
+        humidity.grid(row=1, column=1, padx=20)
+
+        precipitation = ctk.CTkLabel(info_frame, text=(f"Precipitation Chance: {precipitation}%"), justify="center",
+                                     text_color="lightgray")
+        precipitation.grid(row=2, column=1, padx=20)
 
     app.mainloop()
 update()
